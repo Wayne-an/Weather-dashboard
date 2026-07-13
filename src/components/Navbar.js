@@ -1,20 +1,18 @@
 export function Navbar() {
   return `
-    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
-      <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <header class="flex justify-between items-center max-w-6xl mx-auto py-6">
 
-        <h1 class="text-2xl font-bold text-sky-600">
-          🌤 Weather Dashboard
-        </h1>
+      <h1 class="text-3xl font-bold text-slate-800 dark:text-white">
+        🌤️ Weather Dashboard
+      </h1>
 
-        <button
-          class="rounded-full p-2 hover:bg-slate-100 transition"
-          aria-label="Toggle theme"
-        >
-          🌙
-        </button>
+      <button
+        id="theme-toggle"
+        class="bg-white dark:bg-slate-800 dark:text-white border border-slate-300 dark:border-slate-700 px-4 py-2 rounded-xl shadow hover:scale-105 transition"
+      >
+        🌙
+      </button>
 
-      </div>
     </header>
   `;
 }

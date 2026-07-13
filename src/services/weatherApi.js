@@ -45,3 +45,16 @@ export async function getCurrentWeather(latitude, longitude) {
 
   return data.current;
 }
+export async function getForecast(latitude, longitude) {
+  const response = await fetch(
+    `${WEATHER_URL}?latitude=${latitude}&longitude=${longitude}&daily=weather_code,temperature_2m_max,temperature_2m_min&forecast_days=5`
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch forecast.");
+  }
+
+  const data = await response.json();
+
+  return data.daily;
+}

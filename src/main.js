@@ -7,10 +7,13 @@ import { WeatherMetrics } from "./components/WeatherMetrics";
 import {
   getCoordinates,
   getCurrentWeather,
+  getForecast,
 } from "./services/weatherApi.js";
 import { getWeatherCondition } from "./utils/weatherCodes.js";
 import { getWeatherIcon } from "./utils/weatherIcons.js";
-
+import { ForecastSection } from "./components/ForecastSection";
+import { getBackground } from "./utils/backgrounds.js";
+import { toggleTheme } from "./utils/theme.js";
 
 const weatherData = {
   city: "Nairobi, Kenya",
@@ -18,11 +21,12 @@ const weatherData = {
   condition: "Sunny",
 };
 
-function renderWeather(weatherData) {
+
+function renderWeather(weatherData, forecast = []) {
   document.querySelector("#app").innerHTML = `
     ${Navbar()}
 
-    <main class="min-h-screen bg-gradient-to-br from-sky-400 via-sky-200 to-blue-100 p-6">
+    <main class="min-h-screen bg-gradient-to-br ${getBackground(weatherData.condition)} p-6 space-y-8 transition-all duration-700">
 
       ${SearchBar()}
 
@@ -30,12 +34,16 @@ function renderWeather(weatherData) {
 
       ${WeatherMetrics(weatherData)}
 
+      ${ForecastSection(forecast)}
+
     </main>
   `;
   attachSearchListener();
+  attachLocationListener();
+  attachThemeListener();
 }
 
-renderWeather(weatherData);
+renderWeather(weatherData, []);
 
 // ======================
 // API Test
@@ -61,6 +69,19 @@ function attachSearchListener() {
         location.latitude,
         location.longitude
       );
+      const daily = await getForecast(
+        location.latitude,
+        location.longitude
+      );
+      console.log("Forecast data:", daily);
+      const forecast = daily.time.map((date, index) => ({
+  day: new Date(date).toLocaleDateString("en-US", {
+    weekday: "short",
+  }),
+  icon: getWeatherIcon(daily.weather_code[index]),
+  max: Math.round(daily.temperature_2m_max[index]),
+  min: Math.round(daily.temperature_2m_min[index]),
+}));
 
       const weatherData = {
         city: `${location.name}, ${location.country}`,
@@ -75,12 +96,48 @@ function attachSearchListener() {
         visibility: "--",
      };
 
-      renderWeather(weatherData);
+     
+      renderWeather(weatherData, forecast);
 
     } catch (error) {
       renderWeather({ 
         error: error.message, 
       });
     }
+  });
+}
+function attachLocationListener() {
+  const button = document.querySelector("#location-btn");
+
+  if (!button) return;
+
+  button.addEventListener("click", () => {
+    console.log("📍 Location button clicked");
+    console.log("Geolocation API:", navigator.geolocation);
+
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser.");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        console.log("Latitude:", position.coords.latitude);
+        console.log("Longitude:", position.coords.longitude);
+      },
+      (error) => {
+        console.error(error);
+        alert(error.message);
+      }
+    );
+  });
+}
+function attachThemeListener() {
+  const button = document.querySelector("#theme-toggle");
+
+  if (!button) return;
+
+  button.addEventListener("click", () => {
+    toggleTheme();
   });
 }
