@@ -34,7 +34,7 @@ export async function getCoordinates(city) {
  */
 export async function getCurrentWeather(latitude, longitude) {
   const response = await fetch(
-    `${WEATHER_URL}?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m`
+    `${WEATHER_URL}?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code`
   );
 
   if (!response.ok) {
