@@ -9,6 +9,8 @@ import {
   getCurrentWeather,
 } from "./services/weatherApi.js";
 import { getWeatherCondition } from "./utils/weatherCodes.js";
+import { getWeatherIcon } from "./utils/weatherIcons.js";
+
 
 const weatherData = {
   city: "Nairobi, Kenya",
@@ -48,6 +50,9 @@ function attachSearchListener() {
     const city = document.querySelector("#city-input").value.trim();
 
     if (!city) return;
+    renderWeather({ 
+      loading: true,
+    });
 
     try {
       const location = await getCoordinates(city);
@@ -61,6 +66,7 @@ function attachSearchListener() {
         city: `${location.name}, ${location.country}`,
         temperature: Math.round(current.temperature_2m),
         condition: getWeatherCondition(current.weather_code),
+        icon: getWeatherIcon(current.weather_code),
 
         humidity: current.relative_humidity_2m,
         wind: Math.round(current.wind_speed_10m),
@@ -72,7 +78,9 @@ function attachSearchListener() {
       renderWeather(weatherData);
 
     } catch (error) {
-      alert(error.message);
+      renderWeather({ 
+        error: error.message, 
+      });
     }
   });
 }
