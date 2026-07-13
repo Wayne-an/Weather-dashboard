@@ -26,7 +26,7 @@ function renderWeather(weatherData) {
 
       ${CurrentWeather(weatherData)}
 
-      ${WeatherMetrics()}
+      ${WeatherMetrics(weatherData)}
 
     </main>
   `;
@@ -61,7 +61,13 @@ function attachSearchListener() {
         city: `${location.name}, ${location.country}`,
         temperature: Math.round(current.temperature_2m),
         condition: getWeatherCondition(current.weather_code),
-      };
+
+        humidity: current.relative_humidity_2m,
+        wind: Math.round(current.wind_speed_10m),
+
+        pressure: "--",
+        visibility: "--",
+     };
 
       renderWeather(weatherData);
 
