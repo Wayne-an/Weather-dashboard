@@ -4,7 +4,7 @@ export function ForecastSection(forecast = []) {
   return `
     <section class="max-w-5xl mx-auto mt-10">
 
-      <h2 class="text-2xl font-bold text-slate-800 mb-6">
+      <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">
         5-Day Forecast
       </h2>
 

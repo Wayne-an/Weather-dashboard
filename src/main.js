@@ -13,7 +13,11 @@ import { getWeatherCondition } from "./utils/weatherCodes.js";
 import { getWeatherIcon } from "./utils/weatherIcons.js";
 import { ForecastSection } from "./components/ForecastSection";
 import { getBackground } from "./utils/backgrounds.js";
-import { toggleTheme } from "./utils/theme.js";
+import {
+  toggleTheme,
+  loadTheme,
+} from "./utils/theme.js";
+
 
 const weatherData = {
   city: "Nairobi, Kenya",
@@ -26,7 +30,15 @@ function renderWeather(weatherData, forecast = []) {
   document.querySelector("#app").innerHTML = `
     ${Navbar()}
 
-    <main class="min-h-screen bg-gradient-to-br ${getBackground(weatherData.condition)} p-6 space-y-8 transition-all duration-700">
+    <main
+  class="min-h-screen
+         bg-gradient-to-br ${getBackground(weatherData.condition)}
+         dark:from-slate-950
+         dark:via-slate-900
+         dark:to-slate-800
+         p-6 space-y-8
+         transition-all duration-700"
+>
 
       ${SearchBar()}
 
@@ -43,6 +55,7 @@ function renderWeather(weatherData, forecast = []) {
   attachThemeListener();
 }
 
+loadTheme();
 renderWeather(weatherData, []);
 
 // ======================
